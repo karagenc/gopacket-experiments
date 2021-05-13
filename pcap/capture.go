@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/google/gopacket"
@@ -10,16 +11,14 @@ import (
 	"github.com/google/gopacket/pcapgo"
 )
 
-const (
-	maxPackets = 5
-)
+const maxPackets = 5
 
-func write() {
-	fmt.Printf("Capturing %d packets\n\n", maxPackets)
+func capture() {
+	fmt.Printf("Initiating the packet capture. After %d packets sniffer will stop\n\n", maxPackets)
 
 	f, err := os.Create(outputFileName)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer f.Close()
 
@@ -35,7 +34,7 @@ func write() {
 		pcap.BlockForever,
 	)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer handle.Close()
 
@@ -47,15 +46,15 @@ func write() {
 			break
 		}
 
-		fmt.Printf("Captured packet %d\n", i+1)
+		fmt.Printf("Captured packet #%d\n", i+1)
 
 		err = w.WritePacket(packet.Metadata().CaptureInfo, packet.Data())
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 
 		i++
 	}
 
-	fmt.Println("\nFinished packet capture :) Let me show you")
+	fmt.Println("\nFinished the packet capture")
 }

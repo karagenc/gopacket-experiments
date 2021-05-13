@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/pcap"
@@ -15,27 +16,27 @@ const (
 func main() {
 	pcapHandle, err := pcap.OpenOffline(inputFile)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
-	liveHandle, err := pcap.OpenLive(networkInterface,
+	handle, err := pcap.OpenLive(networkInterface,
 		1024,
 		false,
 		pcap.BlockForever,
 	)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	fmt.Println("Sending packets")
 
 	packetSource := gopacket.NewPacketSource(pcapHandle, pcapHandle.LinkType())
 	for packet := range packetSource.Packets() {
-		err = liveHandle.WritePacketData(packet.Data())
+		err = handle.WritePacketData(packet.Data())
 		if err != nil {
-			fmt.Printf("Couldn't send packet, details:%s\n", err.Error())
+			fmt.Printf("Failed to send a packet: %s\n", err.Error())
 		}
 	}
 
-	fmt.Println("Successful!")
+	fmt.Println("Done. Exiting")
 }

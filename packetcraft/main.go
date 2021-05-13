@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
 
 	"github.com/google/gopacket"
@@ -23,7 +24,7 @@ func main() {
 		pcap.BlockForever,
 	)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer handle.Close()
 

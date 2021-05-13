@@ -1,6 +1,7 @@
 *.exe
-packetcraft/packetcraft
-sniff/sniff
-pcap/pcap
-pcapreplay/pcapreplay
-dot11/dot11
+*.pcap
+/packetcraft/packetcraft
+/sniff/sniff
+/pcap/pcap
+/pcapreplay/pcapreplay
+/dot11/dot11

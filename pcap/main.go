@@ -6,9 +6,6 @@ const (
 )
 
 func main() {
-	// ### Write to file ###
-	write()
-
-	// ### Read from pcap ###
-	read()
+	capture() // Capture and write to file.
+	read()    // Read from pcap.
 }

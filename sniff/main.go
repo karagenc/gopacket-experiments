@@ -3,8 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
+	"time"
 
 	"github.com/google/gopacket"
 
@@ -14,7 +18,7 @@ import (
 func main() {
 	ifaces, err := pcap.FindAllDevs()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	for i, iface := range ifaces {
@@ -29,30 +33,41 @@ func main() {
 	fmt.Print("Interface to use: ")
 	input, err := reader.ReadString('\n')
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-	input = strings.Trim(input, "\n")
-	input = strings.Trim(input, "\r")
+	input = strings.Trim(input, "\n\r")
 	input = strings.TrimSpace(input)
 
 	handle, err := pcap.OpenLive(
 		input,
 		1024,
 		false,
-		pcap.BlockForever,
+		100*time.Millisecond,
 	)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer handle.Close()
 
 	fmt.Println("Packet capture is started, press CTRL+C to stop packet capture")
 
 	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
-	for packet := range packetSource.Packets() {
-		// Print the metadata
-		fmt.Printf("\n[Metadata: %s]\n", packet.Metadata().CaptureInfo.Timestamp)
 
-		fmt.Println(packet)
-	}
+	go func() {
+		for packet := range packetSource.Packets() {
+			fmt.Println(packet)
+		}
+	}()
+
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(
+		signalChan,
+		syscall.SIGHUP,
+		syscall.SIGTERM,
+		syscall.SIGINT,
+		syscall.SIGQUIT,
+	)
+
+	<-signalChan
+	fmt.Println("\nExiting")
 }

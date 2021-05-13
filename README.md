@@ -1,8 +1,8 @@
-## Gopacket practices
+## GoPacket practices
 
-Here are the codes that i have written to practice and learn gopacket
+These are some code that i written to learn Go and experiment with GoPacket.
 
-## Compilation
+## Build
 
 You can simply use `go build`
 
