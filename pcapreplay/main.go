@@ -34,9 +34,9 @@ func main() {
 	for packet := range packetSource.Packets() {
 		err = handle.WritePacketData(packet.Data())
 		if err != nil {
-			fmt.Printf("Failed to send a packet: %s\n", err.Error())
+			fmt.Printf("Failed to send a packet: %v\n", err)
 		}
 	}
 
-	fmt.Println("Done. Exiting")
+	fmt.Println("Finished")
 }

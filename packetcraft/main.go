@@ -66,7 +66,7 @@ func main() {
 
 	handle.WritePacketData(buffer.Bytes())
 
-	fmt.Printf("%v", ipFlow)
+	fmt.Printf("%v\n", ipFlow)
 
 	handle.ReadPacketData()
 }

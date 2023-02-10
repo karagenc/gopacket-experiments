@@ -26,7 +26,7 @@ func main() {
 	}
 	defer handle.Close()
 
-	fmt.Println("Packet capture is started, press CTRL+C to stop packet capture")
+	fmt.Println("Packet capture is started, press CTRL+C to stop")
 	go capture(handle)
 
 	signalChan := make(chan os.Signal, 1)

@@ -21,12 +21,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	for i, iface := range ifaces {
-		fmt.Printf("Interface #%d\nName: %s\nIP addresses:\n", i, iface.Name)
-		for _, addr := range iface.Addresses {
-			fmt.Println(addr.IP)
+	for _, iface := range ifaces {
+		fmt.Printf("Name: %s\n", iface.Name)
+		if len(iface.Addresses) > 0 {
+			fmt.Println("IP addresses:")
 		}
-		fmt.Printf("Description: %s\n\n", iface.Description)
+		for _, addr := range iface.Addresses {
+			fmt.Printf("    %s\n", addr.IP)
+		}
+		if iface.Description != "" {
+			fmt.Printf("Description: %s\n", iface.Description)
+		}
+		fmt.Printf("\n")
 	}
 
 	reader := bufio.NewReader(os.Stdin)
@@ -49,7 +55,7 @@ func main() {
 	}
 	defer handle.Close()
 
-	fmt.Println("Packet capture is started, press CTRL+C to stop packet capture")
+	fmt.Println("Packet capture is started, press CTRL+C to stop")
 
 	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 
@@ -69,5 +75,5 @@ func main() {
 	)
 
 	<-signalChan
-	fmt.Println("\nExiting")
+	fmt.Println("\nFinished")
 }

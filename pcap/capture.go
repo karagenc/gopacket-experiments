@@ -14,7 +14,7 @@ import (
 const maxPackets = 5
 
 func capture() {
-	fmt.Printf("Initiating the packet capture. After %d packets sniffer will stop\n\n", maxPackets)
+	fmt.Printf("I am initiating the packet capture. After %d packets, I will stop\n\n", maxPackets)
 
 	f, err := os.Create(outputFileName)
 	if err != nil {
@@ -46,15 +46,16 @@ func capture() {
 			break
 		}
 
-		fmt.Printf("Captured packet #%d\n", i+1)
+		fmt.Printf("%d\n", i+1)
 
 		err = w.WritePacket(packet.Metadata().CaptureInfo, packet.Data())
 		if err != nil {
-			log.Fatal(err)
+			fmt.Printf("Error: %s\n", err)
+			break
 		}
 
 		i++
 	}
 
-	fmt.Println("\nFinished the packet capture")
+	fmt.Println("\nPacket capture is finished")
 }
