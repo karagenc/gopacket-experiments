@@ -1,4 +1,4 @@
-module github.com/tomruk/gopacket-experiments
+module github.com/karagenc/gopacket-experiments
 
 go 1.15
 
